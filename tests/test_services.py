@@ -1,9 +1,10 @@
 """Basic unit tests verifying the correctness of services and configuration."""
-import pytest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch
+
 from src.config import config
-from src.services.vector_store import VectorDBService
 from src.services.rag_engine import RAGEngineService
+from src.services.vector_store import VectorDBService
+
 
 def test_config_loads_defaults():
     """Checks if Pydantic correctly loads default collection names."""
@@ -19,7 +20,7 @@ def test_vector_db_service_initialization(MockAsyncClient, MockClient):
     """
     # Initialize the service
     service = VectorDBService()
-    
+
     # Verification
     assert service.collection == config.qdrant_collection_name
     # Ensure that the clients were called with the correct URL
@@ -33,6 +34,6 @@ def test_rag_engine_service_dependency_injection(MockAsync, MockSync, MockStore)
     """Checks if RAGEngineService correctly accepts the injected database dependency."""
     db_service = VectorDBService()
     rag_service = RAGEngineService(db_service=db_service)
-    
+
     # Verify that the injected service is exactly the same object
     assert rag_service.db_service == db_service

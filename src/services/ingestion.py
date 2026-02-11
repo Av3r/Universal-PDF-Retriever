@@ -1,7 +1,9 @@
 """Service responsible for parsing complex PDFs and loading vectors."""
-from llama_parse import LlamaParse
 from llama_index.core import SimpleDirectoryReader, VectorStoreIndex
+from llama_parse import LlamaParse
+
 from src.services.vector_store import VectorDBService
+
 
 class IngestionService:
     """Processes local documents and stores them in the vector database."""
@@ -13,7 +15,7 @@ class IngestionService:
     def run_pipeline(self) -> None:
         """Main flow: Parse (LlamaParse) -> Chunking -> Embedding -> Vector DB."""
         print(f"[*] Starting ingestion process from directory: {self.data_dir}")
-        
+
         # Universal parsing instructions enforcing table extraction and noise reduction
         parsing_instructions = (
             "You are parsing a professional document. "
@@ -28,17 +30,17 @@ class IngestionService:
             parsing_instruction=parsing_instructions,
             verbose=True
         )
-        
+
         file_extractor = {".pdf": parser}
-        
+
         # Read documents from the target directory
         documents = SimpleDirectoryReader(
-            self.data_dir, 
+            self.data_dir,
             file_extractor=file_extractor
         ).load_data()
-        
+
         print(f"[*] Extracted {len(documents)} document chunks. Building index...")
-        
+
         # Store embeddings into Qdrant
         storage_context = self.db_service.get_storage_context()
         VectorStoreIndex.from_documents(

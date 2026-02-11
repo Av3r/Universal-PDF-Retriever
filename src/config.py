@@ -1,9 +1,11 @@
 """Application configuration module using Pydantic."""
-from pydantic_settings import BaseSettings, SettingsConfigDict
-from llama_index.core import Settings
-from llama_index.llms.openai import OpenAI
-from llama_index.embeddings.openai import OpenAIEmbedding
 import os
+
+from llama_index.core import Settings
+from llama_index.embeddings.openai import OpenAIEmbedding
+from llama_index.llms.openai import OpenAI
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 
 class AppConfig(BaseSettings):
     """Main configuration class, reads variables from .env file."""
@@ -11,6 +13,9 @@ class AppConfig(BaseSettings):
     llama_cloud_api_key: str
     qdrant_url: str = "http://localhost:6333"
     qdrant_collection_name: str = "universal_rag_collection"
+
+    app_username: str = "admin"       # Default value if missing in .env
+    app_password: str = "admin123"    # Default value if missing in .env
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
@@ -31,10 +36,10 @@ RULES:
 def init_llm_settings() -> None:
     """Initialize global LLM and Embedding models for LlamaIndex."""
     os.environ["OPENAI_API_KEY"] = config.openai_api_key
-    
+
     # Fast, cheap, and effective embedding model
     Settings.embed_model = OpenAIEmbedding(model="text-embedding-3-small")
-    
+
     # Cost-effective yet highly capable model for text generation
     Settings.llm = OpenAI(
         model="gpt-4o-mini",

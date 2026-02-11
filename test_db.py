@@ -1,7 +1,9 @@
 import qdrant_client
-from llama_index.vector_stores.qdrant import QdrantVectorStore
 from llama_index.core import VectorStoreIndex
-from src.config import init_llm_settings, config
+from llama_index.vector_stores.qdrant import QdrantVectorStore
+
+from src.config import config, init_llm_settings
+
 
 def test_retrieval():
     print("Initializing LLM and Embeddings...")
@@ -10,18 +12,18 @@ def test_retrieval():
     print("Connection to Qdrant...")
     client = qdrant_client.QdrantClient(url="http://localhost:6333")
     vector_store = QdrantVectorStore(client=client, collection_name=config.qdrant_collection_name)
-    
+
     index = VectorStoreIndex.from_vector_store(vector_store=vector_store)
-    
+
     # Create a direct retriever (data fetcher) - without chat, just the search engine
     retriever = index.as_retriever(similarity_top_k=5)
-    
+
     #query = "Jaka jest strategia banku?"
     query = "jaki był depozyt na koniec 2024 r."
     print(f"\nSzukam w bazie zapytania: '{query}'")
-    
+
     nodes = retriever.retrieve(query)
-    
+
     if not nodes:
         print("❌ ERROR: No results returned from the database! Vectors do not match.")
     else:
