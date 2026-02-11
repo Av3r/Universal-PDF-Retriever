@@ -94,3 +94,13 @@ If you wish to develop or run tests locally:
 4. Run the ingestion locally: `python src/ingest.py`
 5. Run the UI with hot-reload: `chainlit run src/app.py -w`
 6. Run tests: `pytest tests/`
+
+
+## 📸 Example Usage
+
+Below is a demonstration of the Universal RAG Assistant in action. 
+The system successfully retrieves exact figures from a complex 100+ page financial report and provides a generated answer backed by verifiable, interactive citations.
+
+![Universal RAG Assistant Chat Example](image/universal_rag_for_bgk_raport.png)
+
+*Example: The assistant was asked about the interest result from the year the report was issued and the previous year, where he provided the correct results based on raport_2024_pl.pdf*
