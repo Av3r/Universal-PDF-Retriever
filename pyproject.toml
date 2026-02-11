@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "universal-rag"
+version = "0.1.0"
+description = "Universal RAG Assistant for complex documents with citations and memory."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "llama-index>=0.10.0",
+    "llama-index-vector-stores-qdrant",
+    "llama-index-embeddings-openai",
+    "llama-index-llms-openai",
+    "llama-parse",
+    "chainlit",
+    "python-dotenv",
+    "qdrant-client",
+    "pydantic-settings"
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "ruff"
+]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "W", "F", "I", "C90"]
+ignore = []
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
